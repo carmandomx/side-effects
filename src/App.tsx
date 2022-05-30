@@ -1,25 +1,35 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, { useState, useEffect, createContext, useContext } from 'react'
+import { fetchPoke } from './pokeApi.service'
+import ThemeContext, { ThemeProvider } from './themeContext';
+import useSearchPoke from './useSearchPoke'
 import './App.css';
 
+
+
+const functionalUpdate = (previousState: number) => {
+  if (previousState === 10) return previousState;
+
+  return previousState + 1;
+}
 function App() {
+  const [name, imgUrl, searchTerm, setSearchTerm] = useSearchPoke()
+  
+  const theme = useContext(ThemeContext);
+
+  console.log(theme);
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <ThemeProvider >
+
+
+      <div className="App" style={theme.currentTheme} >
+        <button onClick={() => theme.changeTheme()}>Change theme</button>
+        <input type={'text'} value={searchTerm} onChange={(e) => {
+          setSearchTerm(e.target.value);
+        }} />
+        <h5>{name}</h5>
+        <img src={imgUrl} alt="" />
+      </div>
+    </ThemeProvider>
   );
 }
 
